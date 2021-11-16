@@ -2,6 +2,7 @@ EXTRACT_NUM = 10
 LOGIN_OPTION = "facebook"
 DRIVER_PATH = "~/chromedriver" 
 HASH_TAG = "마블"
+MAIN_URL = "https://www.instagram.com/"
 LOGIN_URL = "https://www.instagram.com/accounts/login/"
 
 CONTENT_URL = "https://www.instagram.com/explore/tags/"
@@ -23,6 +24,7 @@ HASH_TAG_CSS = ".C7I1f.X7jCj"
 COMMENT_MORE_BTN = "button.dCJp8.afkep"
 COMMENT_ID_CSS = "ul.Mr508 > div.ZyFrc > li.gElp9.rUo9f > div.P9YgZ > div.C7I1f > div.C4VMK > h3"
 COMMENT_TEXT_CSS="ul.Mr508 > div.ZyFrc > li.gElp9.rUo9f > div.P9YgZ > div.C7I1f > div.C4VMK > span"
+PROFILE_IMAGE_CSS = "img._6q-tv"
 PRINT_FLAG=False
 NEXT_ARROW_BTN_CSS_1="._65Bje.coreSpriteRightPaginationArrow"
 NEXT_ARROW_BTN_CSS_2="._65Bje.coreSpriteRightPaginationArrow"

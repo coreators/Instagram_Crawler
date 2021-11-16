@@ -6,9 +6,10 @@ from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
 import random
 import time
+from instagram_crawler.data import RANKING
 from instagram_crawler.metadata import INSTAGRAM_ID_FORM_NAME, INSTAGRAM_PW_FORM_NAME, INSTAGRMA_LOGIN_BTN, \
     FACEBOOK_ID_FORM_NAME, FACEBOOK_PW_FORM_NAME, FACEBOOK_LOGIN_PAGE_BTN_CSS_1, FACEBOOK_LOGIN_PAGE_BTN_CSS_2, \
-    FACEBOOK_LOGIN_BTN, LOGIN_URL, CONTENT_URL, FIRST_IMG_CSS, NEXT_ARROW_BTN_CSS_1, NEXT_ARROW_BTN_CSS_2, \
+    FACEBOOK_LOGIN_BTN, LOGIN_URL, CONTENT_URL, FIRST_IMG_CSS, MAIN_URL, NEXT_ARROW_BTN_CSS_1, NEXT_ARROW_BTN_CSS_2, \
     COMMENT_MORE_BTN
 
 
@@ -111,6 +112,18 @@ def instagram_login(driver, user_id, user_password, login_option):
     return is_login_success
 
 
+def move_profile_page(driver, profile_name):
+    try:
+        profile_url = MAIN_URL + profile_name
+        driver.get(profile_url)
+        time.sleep(5)
+        is_move_success = True
+    except:
+        is_move_success = False
+
+    return is_move_success
+
+
 def move_hash_tag_page(driver, hash_tag):
     try:
         hash_tag_url = CONTENT_URL + hash_tag
@@ -153,6 +166,19 @@ def click_next_arrow_button(driver):
         check_arrow = False
 
     return check_arrow
+
+
+def save_profile_img_src_to_csv_file(srcs, save_file_name):
+    try:
+        insta_info_df = pd.DataFrame(
+            {"profile": RANKING, "src": srcs}
+        )
+        insta_info_df.to_csv("{}.csv".format(save_file_name), index=False)
+        is_save_file_success = True
+    except:
+        is_save_file_success = False
+
+    return is_save_file_success
 
 
 def save_extract_data_to_csv_file(location_infos, location_hrefs, upload_ids, date_texts,

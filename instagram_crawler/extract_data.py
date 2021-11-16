@@ -3,11 +3,22 @@
 import re
 import json
 import time
-from instagram_crawler.metadata import LOCATION_CSS, UPLOAD_USER_ID_CSS, DATE_CSS, MAIN_TEXT_CSS, HASH_TAG_CSS, \
+from instagram_crawler.data import RANKING
+from instagram_crawler.metadata import LOCATION_CSS, PROFILE_IMAGE_CSS, UPLOAD_USER_ID_CSS, DATE_CSS, MAIN_TEXT_CSS, HASH_TAG_CSS, \
     COMMENT_ID_CSS, COMMENT_TEXT_CSS
 from instagram_crawler.utils import make_chrome_driver, instagram_login, move_hash_tag_page, \
-    click_first_image, click_next_arrow_button, click_more_comment_button, \
-    save_extract_data_to_csv_file, save_extract_tag_data_to_csv_file, delay_until_next_step
+    click_first_image, click_next_arrow_button, click_more_comment_button, move_profile_page, \
+    save_extract_data_to_csv_file, save_extract_tag_data_to_csv_file, delay_until_next_step, save_profile_img_src_to_csv_file
+
+
+def get_profile_image(driver):
+    try:
+        data = driver.find_element_by_css_selector(PROFILE_IMAGE_CSS)
+        src = data.get_attribute("src")
+    except:
+        src = None
+
+    return src
 
 
 def get_location_data(driver):
@@ -114,6 +125,37 @@ def get_comment_data(driver, upload_user_id, instagram_tags):
     comment_json = json.dumps(comment_data, ensure_ascii=False)
 
     return comment_json, instagram_tags
+
+
+def crawling_profile_src(args):
+    user_id, user_password = args.id, args.password
+    login_option = args.login_option
+    driver_path, display_option = args.driver_path, args.display
+    save_file_name = args.extract_file
+
+    is_login_success = False
+
+    driver = make_chrome_driver(driver_path=driver_path, display_option=display_option)
+
+    if driver is not None:
+        is_login_success = instagram_login(driver=driver, user_id=user_id, user_password=user_password,
+                                           login_option=login_option)
+
+    profile_srcs = []
+    if is_login_success:
+        for rank in RANKING:
+            profile_success = move_profile_page(driver=driver, profile_name=rank)
+
+            if profile_success:
+                src = get_profile_image(driver)
+                profile_srcs.append(src)
+
+    is_save_file_success = save_profile_img_src_to_csv_file(srcs=profile_srcs, save_file_name=save_file_name)
+
+    driver.close()
+    driver.quit()
+
+    return is_save_file_success
 
 
 def crawling_instagram(args):
