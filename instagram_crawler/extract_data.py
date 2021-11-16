@@ -3,11 +3,21 @@
 import re
 import json
 import time
-from instagram_crawler.metadata import LOCATION_CSS, UPLOAD_USER_ID_CSS, DATE_CSS, MAIN_TEXT_CSS, HASH_TAG_CSS, \
+from instagram_crawler.metadata import LOCATION_CSS, PROFILE_IMAGE_CSS, UPLOAD_USER_ID_CSS, DATE_CSS, MAIN_TEXT_CSS, HASH_TAG_CSS, \
     COMMENT_ID_CSS, COMMENT_TEXT_CSS
 from instagram_crawler.utils import make_chrome_driver, instagram_login, move_hash_tag_page, \
     click_first_image, click_next_arrow_button, click_more_comment_button, \
     save_extract_data_to_csv_file, save_extract_tag_data_to_csv_file, delay_until_next_step
+
+
+def get_profile_image(driver):
+    try:
+        data = driver.find_element_by_css_selector(PROFILE_IMAGE_CSS)
+        src = data.get_attribute("src")
+    except:
+        src = None
+
+    return src
 
 
 def get_location_data(driver):
