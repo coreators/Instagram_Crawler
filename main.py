@@ -102,5 +102,8 @@ def instagram_profile_src():
 
 
 if __name__ == "__main__":
+    # For crawling instagram post data.
     # instagram_main()
+
+    # For crawling instagram profile src data.
     instagram_profile_src()
